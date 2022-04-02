@@ -39,7 +39,3 @@ Take a look at the pictures below, guidelines and in CSA.java comments for how t
 <img width="953" alt="B338" src="https://user-images.githubusercontent.com/87842051/160220177-92906580-1794-4407-8657-4662310e2424.png">
 
 *Fig 2: An example of the CSA algorithm running option B (Manual Feasible Color Configurations) with c = [3 3 8].*
-
-
-## ACKNOWLEDGMENTS
-This work was supported by the Australian Research Council through the Discovery Project under Grant DP200100731 and carried out on Oracle virtual machines, supported by Oracle for Research.
