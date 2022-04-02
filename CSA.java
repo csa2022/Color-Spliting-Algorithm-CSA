@@ -93,7 +93,7 @@ public class CSA {
                         CSA.printAllFeasibleSeqs(F);
                         System.out.println("---------------------------------------------------");
 
-                        System.out.print("Enter your Feasible Color sequence c = [c1,...,ch] (e.g, " + CSA.oneFeasibleSeq(F) + "):");
+                        System.out.print("Enter your Feasible Color Sequence c = [c1,...,ch] (e.g, " + CSA.oneFeasibleSeq(F) + "):");
                         // Enter option from keyboard
                         String vc = input.nextLine();
                         String[] ci = vc.split(" ");
@@ -755,7 +755,7 @@ class CheckCSA{
         //Second, test if sets have valid sizes
         for (int i = 0; i < S.length; i++) {
             if (!validSizes.contains(S[i].getSize())) {
-                System.out.println("ERROR: Set " + i + " has an invalid size = " + S[i].getSize());
+                //System.out.println("ERROR: Set " + i + " has an invalid size = " + S[i].getSize());
                 return false;
             }
         }
