@@ -56,7 +56,6 @@ public class CSA {
         //Loop forever to get your input and run the CSA algorithm unless you quit the loop, choosing option "Q".
         while (true) {
             normal = true;
-            System.out.print("Removing all the garbage collector .....");
             System.gc(); //runs the garbage collector
             printMenu();
 
@@ -88,11 +87,6 @@ public class CSA {
                     F = CSA.feasibleConfList(h);  //List of all feasible sequences
 
                     if(manual) {
-                        System.out.println("---------------------------------------------------");
-                        System.out.println("Suggested the List of all feasible sequences: ");
-                        CSA.printAllFeasibleSeqs(F);
-                        System.out.println("---------------------------------------------------");
-
                         System.out.print("Enter your Feasible Color Sequence c = [c1,...,ch] (e.g, " + CSA.oneFeasibleSeq(F) + "):");
                         // Enter option from keyboard
                         String vc = input.nextLine();
@@ -759,7 +753,6 @@ class CheckCSA{
                 return false;
             }
         }
-
         return true;
     }
 
@@ -774,7 +767,6 @@ class CheckCSA{
                 }
             }
         }
-
         return true;
     }
 
@@ -785,7 +777,6 @@ class CheckCSA{
         while (parent > ancestor) {
             parent = parent / 2;
         }
-
         return parent == ancestor;
     }
 
@@ -804,7 +795,6 @@ class CheckCSA{
         if ((2 * n - 2) % h != 0) {
             validSizes.add((2 * n - 2) / h + 1);
         }
-
         return validSizes;
     }
 }
