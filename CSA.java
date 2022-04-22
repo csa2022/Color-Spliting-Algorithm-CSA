@@ -14,7 +14,10 @@
 #          for the tree T (30) (around two billion nodes) in under five minutes (with 16GB allocated for Java’s heap memory).
 */
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -27,8 +30,6 @@ public class CSA {
 
         //"ON"/"OFF" test CSA output functions
         String CHECK = "OFF";
-        //Change manual = false to check conditions of all possible feasible sequences. Default manual = true.
-        boolean manual = true;
         //"ON"/"OFF" to export CSA results
         String EXP = "OFF";
         //You should change this PATH to save your output when EXP = "ON"
@@ -37,8 +38,6 @@ public class CSA {
         //Array of balanced/unbalanced sets
         NodesSet[] NodesSets;
         CheckCSA test = new CheckCSA();
-        //List of all feasible sequences
-        ArrayList<ArrayList<NumColor>> F;
         //List of color sequence c
         List<NumColor> c = new ArrayList<>();
         //The color sequence c = [c1,...,ch]
@@ -48,14 +47,12 @@ public class CSA {
         byte h = 0;
         //A for Automatic Balanced Ancestral Coloring; B for Manual Feasible Color sequence
         String option;
-        boolean normal;
         Scanner input = new Scanner(System.in);
         char[] color = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q'
                 , 'R','S', 'T', 'U', 'V','W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7','8', '9'};
 
         //Loop forever to get your input and run the CSA algorithm unless you quit the loop, choosing option "Q".
         while (true) {
-            normal = true;
             System.gc(); //runs the garbage collector
             printMenu();
 
@@ -82,77 +79,60 @@ public class CSA {
             else if (option.charAt(0) == 'B' || option.charAt(0) == 'b') {
                 do {
                     c.clear();
-                    h = h(); //Enter the height of a tree "h" from keyboard
-                    input = new Scanner(System.in);
-                    F = CSA.feasibleConfList(h);  //List of all feasible sequences
+                    System.out.print("Enter your Feasible Color Sequence c = [c1,...,ch] (e.g., 3 6 8 13 ): ");
+                    // Enter option from keyboard
+                    String vc = input.nextLine();
+                    String[] ci = vc.split(" ");
+                    h = (byte) ci.length;
 
-                    if(manual) {
-                        System.out.print("Enter your Feasible Color Sequence c = [c1,...,ch] (e.g, " + CSA.oneFeasibleSeq(F) + "):");
-                        // Enter option from keyboard
-                        String vc = input.nextLine();
-                        String[] ci = vc.split(" ");
-                        h = (byte) ci.length;
-
-                        for (int i = 0; i < h; i++) {
-                            c.add(new NumColor(color[i], Integer.parseInt(ci[i])));
-                        }
-
-                        Collections.sort(c);
+                    for (int i = 0; i < h; i++) {
+                        c.add(new NumColor(color[i], Integer.parseInt(ci[i])));
                     }
-                    /*Check if:
-                        1. All nodes in the tree (except root) appear exactly once across S
-                        2. All node IDs in the tree (except root) are inside the range of IDs (from 2 to (2^(h+1) - 2))
-                        3. Total number of nodes in the tree is the same as total nodes in the perfect binary tree.
-                        4. No ancestor-descendant pair appears in any set*/
-                    else {
-                        testAllCSA(CSA, F, test, h);
-                        normal = false;
-                        break;
-                    }
+
+                    Collections.sort(c);
+
                 } while (!CSA.isFeasible(h, c));
 
             }
             //Invalid input option
             else System.out.println("Warning! Invalid input option. The option has to be a letter A, B or Q");
 
-            if(normal) {
-                c.forEach(x -> vectorC.add(x.getSize()));
+            c.forEach(x -> vectorC.add(x.getSize()));
 
-                //Start Color-Splitting Algorithm ************************** START *************************
-                long startTime = System.nanoTime();
+            //Start Color-Splitting Algorithm ************************** START *************************
+            long startTime = System.nanoTime();
 
-                //Color-Splitting Algorithm
-                NodesSets = CSA.ColorSplitting(h, c);
+            //Color-Splitting Algorithm
+            NodesSets = CSA.ColorSplitting(h, c);
 
-                //End Color-Splitting Algorithm ***************************** END **************************
-                long endTime = System.nanoTime();
-                long timeElapsed = (endTime - startTime) / 1000000;
+            //End Color-Splitting Algorithm ***************************** END **************************
+            long endTime = System.nanoTime();
+            long timeElapsed = (endTime - startTime) / 1000000;
 
-                //Print input including the height of a tree and a color sequence c = [c1,...,ch]
-                System.out.println("*** Input:");
-                System.out.println("    Tree height: h = " + h);
-                System.out.println("    c = " + vectorC);
+            //Print input including the height of a tree and a color sequence c = [c1,...,ch]
+            System.out.println("*** Input:");
+            System.out.println("    Tree height: h = " + h);
+            System.out.println("    c = " + vectorC);
 
-                //Print Output
-                System.out.println("*** Output:");
-                System.out.println("    Execution time in milliseconds: " + timeElapsed);
+            //Print Output
+            System.out.println("*** Output:");
+            System.out.println("    Execution time in milliseconds: " + timeElapsed);
 
-                //Uncomment/Comment this block below if you want/not to print Output sets in Terminal.
-                Arrays.stream(NodesSets).forEach(s -> {
-                    System.out.print("    Color " + s.getColorSet() + ": ");
-                    Arrays.stream(s.getAddNodes()).forEach(r -> System.out.print(r + " "));
-                    System.out.println();
-                });
+            //Uncomment/Comment this block below if you want/not to print Output sets in Terminal.
+            Arrays.stream(NodesSets).forEach(s -> {
+                System.out.print("    Color " + s.getColorSet() + ": ");
+                Arrays.stream(s.getAddNodes()).forEach(r -> System.out.print(r + " "));
+                System.out.println();
+            });
 
-                //Export Output on txt files.
-                export.SaveTreeTXT(NodesSets);
+            //Export Output on txt files.
+            export.SaveTreeTXT(NodesSets);
 
-                //Turn CHECK to "ON" if you want to test CSA Outputs
-                testCSA(CHECK, test, NodesSets, h);
+            //Turn CHECK to "ON" if you want to test CSA Outputs
+            testCSA(CHECK, test, NodesSets, h);
 
-                c.clear();
-                vectorC.clear();
-            }
+            c.clear();
+            vectorC.clear();
         }
     }
 
@@ -747,8 +727,8 @@ class CheckCSA{
     public boolean IsBalancedSets(NodesSet[] S, int h) {
         Set<Integer> validSizes = setSizes(h);
         //Second, test if sets have valid sizes
-        for (int i = 0; i < S.length; i++) {
-            if (!validSizes.contains(S[i].getSize())) {
+        for (NodesSet nodesSet : S) {
+            if (!validSizes.contains(nodesSet.getSize())) {
                 //System.out.println("ERROR: Set " + i + " has an invalid size = " + S[i].getSize());
                 return false;
             }
