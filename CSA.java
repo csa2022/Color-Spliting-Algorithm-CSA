@@ -420,7 +420,7 @@ class ColorSplittingAlgorithm {
         }
     }
 
-    //Corollary 2.12 (Balanced Color sequence) return 𝑐 = [𝑐1, 𝑐2, . . . , 𝑐ℎ]
+    //Corollary 2 (Balanced Color sequence) return 𝑐 = [𝑐1, 𝑐2, . . . , 𝑐ℎ]
     public List<NumColor> balancedColorSequence(byte h) {
         int cValue;
         byte u = (byte) ((Math.pow(2, h + 1) - 2) % h);
@@ -441,7 +441,7 @@ class ColorSplittingAlgorithm {
         return c;
     }
 
-    //Definition 2.3 (Feasible Color Sequence). A color sequence 𝑐 of dimension ℎ is called
+    //Definition 2 (Feasible Color Sequence). A color sequence 𝑐 of dimension ℎ is called
     //"ℎ-feasible" if after being sorted in a non-decreasing order (so that 𝑐1 ≤ 𝑐2 ≤ · · · ≤ 𝑐ℎ), it satisfies
     //the following two conditions: (C1) and (C2)
     public boolean isFeasible(byte h, List<NumColor> c) {
